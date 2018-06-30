@@ -88,14 +88,11 @@ public class RetrieveLotteryInfo extends AsyncTask<Void, Void, ArrayList<String>
     private ArrayList<String> getRawInfo(Bitmap bitmap)
     {
         ArrayList<String> listResult = new ArrayList<>();
-//        StringBuilder sb = new StringBuilder();
         ArrayList<Bitmap> bitmapList = CropImage(bitmap);
         TextRecognizer textRecognizer = new TextRecognizer.Builder(view.getContext()).build();
         for(int i=0;i<bitmapList.size();i++) {
             Bitmap bmp = bitmapList.get(i);
 
-//            sb.append("["+String.valueOf(i)+"]");
-//            sb.append("\n");
             if(!textRecognizer.isOperational() || bmp == null)
             {
                 Toast.makeText(view.getContext(),"No Text",Toast.LENGTH_SHORT).show();
@@ -108,11 +105,7 @@ public class RetrieveLotteryInfo extends AsyncTask<Void, Void, ArrayList<String>
                 for(int j= 0; j < items.size(); ++j)
                 {
                     TextBlock myItems = items.valueAt(j);
-
-//                    sb.append(myItems.getValue());
                     temp.append(myItems.getValue());
-
-//                    sb.append("\n");
                     temp.append("\n");
                 }
                 listResult.add(temp.toString());
