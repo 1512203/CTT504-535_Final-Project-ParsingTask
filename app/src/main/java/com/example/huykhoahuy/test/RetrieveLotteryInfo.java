@@ -1,5 +1,6 @@
 package com.example.huykhoahuy.test;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.os.AsyncTask;
@@ -25,7 +26,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RetrieveLotteryInfo extends AsyncTask<Void,Void,StringBuilder>{
+public class RetrieveLotteryInfo extends AsyncTask<Void, Void, ArrayList<String> >{
 
     private View view;
     private Bitmap bitmap;
@@ -43,12 +44,9 @@ public class RetrieveLotteryInfo extends AsyncTask<Void,Void,StringBuilder>{
         this.progressBar = progressBar;
     }
 
-    private ArrayList<String> listResult =new ArrayList<>();
-
-
+//    private ArrayList<String> listResult = new ArrayList<>();
 
     private ArrayList<Bitmap> CropImage(Bitmap bitmap) {
-
         ArrayList<Bitmap> bitmapList = new ArrayList<>();
         int w = bitmap.getWidth();
         int h = bitmap.getHeight();
@@ -87,16 +85,17 @@ public class RetrieveLotteryInfo extends AsyncTask<Void,Void,StringBuilder>{
         return bitmapList;
     }
 
-    public StringBuilder getRawInfo(Bitmap bitmap)
+    private ArrayList<String> getRawInfo(Bitmap bitmap)
     {
-        StringBuilder sb = new StringBuilder();
+        ArrayList<String> listResult = new ArrayList<>();
+//        StringBuilder sb = new StringBuilder();
         ArrayList<Bitmap> bitmapList = CropImage(bitmap);
         TextRecognizer textRecognizer = new TextRecognizer.Builder(view.getContext()).build();
         for(int i=0;i<bitmapList.size();i++) {
             Bitmap bmp = bitmapList.get(i);
 
-            sb.append("["+String.valueOf(i)+"]");
-            sb.append("\n");
+//            sb.append("["+String.valueOf(i)+"]");
+//            sb.append("\n");
             if(!textRecognizer.isOperational() || bmp == null)
             {
                 Toast.makeText(view.getContext(),"No Text",Toast.LENGTH_SHORT).show();
@@ -106,26 +105,26 @@ public class RetrieveLotteryInfo extends AsyncTask<Void,Void,StringBuilder>{
                 Frame frame = new Frame.Builder().setBitmap(bmp).build();
                 SparseArray<TextBlock> items = textRecognizer.detect(frame);
                 StringBuilder temp = new StringBuilder();
-                for(int j= 0;j<items.size();++j)
+                for(int j= 0; j < items.size(); ++j)
                 {
                     TextBlock myItems = items.valueAt(j);
 
-                    sb.append(myItems.getValue());
+//                    sb.append(myItems.getValue());
                     temp.append(myItems.getValue());
 
-                    sb.append("\n");
+//                    sb.append("\n");
                     temp.append("\n");
                 }
                 listResult.add(temp.toString());
             }
 
         }
-        return sb;
+        return listResult;
     }
 
 
     @Override
-    protected StringBuilder doInBackground(Void... voids) {
+    protected ArrayList<String> doInBackground(Void... voids) {
         progressBar.setVisibility(View.VISIBLE);
         try{
             return getRawInfo(bitmap);
@@ -140,9 +139,13 @@ public class RetrieveLotteryInfo extends AsyncTask<Void,Void,StringBuilder>{
         progressBar.setVisibility(View.VISIBLE);
     }
 
-    public void onPostExecute(StringBuilder sb)
-    {
+    public void onPostExecute(ArrayList<String> listResult) {
+
         progressBar.setVisibility(View.GONE);
+
+        ParsingListResultToGetInformation parsingList = new ParsingListResultToGetInformation();
+        LotteryInfo lotteryInfo = parsingList.getLotteryInfo(listResult);
+
         //Phần đưa thông tin vào
         //etCode.setText(........);
         //etDate.setText(........);
