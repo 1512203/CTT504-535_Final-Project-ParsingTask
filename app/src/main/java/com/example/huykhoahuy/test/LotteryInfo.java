@@ -1,22 +1,29 @@
 package com.example.huykhoahuy.test;
 
-import java.util.Date;
-
 class LotteryInfo {
 
-    private Date lotteryDate;
+    private String lotteryDate;
     private String lotteryHost;
     private String lotteryCode;
 
-    // Constructor
-    public LotteryInfo(Date _lotteryDate, String _lotteryHost, String _lotteryCode) {
-        this.lotteryCode = _lotteryCode;
-        this.lotteryDate = _lotteryDate;
-        this.lotteryHost = _lotteryHost;
+
+    // Setter
+
+
+    public void setLotteryCode(String lotteryCode) {
+        this.lotteryCode = lotteryCode;
+    }
+
+    public void setLotteryDate(String lotteryDate) {
+        this.lotteryDate = lotteryDate;
+    }
+
+    public void setLotteryHost(String lotteryHost) {
+        this.lotteryHost = lotteryHost;
     }
 
     // Getter
-    public Date getLotteryDate() {
+    public String getLotteryDate() {
         return lotteryDate;
     }
 
